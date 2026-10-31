@@ -1,0 +1,133 @@
+@for (block of blocks(); track $index) {
+  @switch (block.kind) {
+    @case ('p') {
+      <p class="b-p" appReveal><app-rich-text [text]="block.text" /></p>
+    }
+
+    @case ('h') {
+      <h2 class="b-h" [attr.id]="block.id" appReveal>{{ block.text }}</h2>
+    }
+
+    @case ('list') {
+      <ul class="b-list" [attr.data-variant]="block.variant ?? 'dot'">
+        @for (item of block.items; track $index; let i = $index) {
+          <li appReveal [revealDelay]="i * 40">
+            @switch (block.variant) {
+              @case ('steps') {
+                <span class="b-list__marker b-list__marker--num">{{ i + 1 }}</span>
+              }
+              @case ('check') {
+                <span class="b-list__marker b-list__marker--check"><app-icon name="check" [size]="14" [stroke]="2.5" /></span>
+              }
+              @default {
+                <span class="b-list__marker b-list__marker--dot"></span>
+              }
+            }
+            <span><app-rich-text [text]="item" /></span>
+          </li>
+        }
+      </ul>
+    }
+
+    @case ('figure') {
+      <app-figure class="b-figure" appReveal [figure]="block.figure" [alt]="block.alt" [caption]="block.caption" />
+    }
+
+    @case ('figures') {
+      <div class="b-figures">
+        @for (f of block.items; track f.figure; let i = $index) {
+          <app-figure appReveal [revealDelay]="i * 40" [figure]="f.figure" [alt]="f.alt" [caption]="f.caption" />
+        }
+      </div>
+    }
+
+    @case ('quote') {
+      <figure class="b-quote" appReveal>
+        <blockquote>
+          @for (p of block.paragraphs; track $index) {
+            <p><app-rich-text [text]="p" /></p>
+          }
+          @if (block.list) {
+            <ul>
+              @for (item of block.list; track $index) {
+                <li><app-rich-text [text]="item" /></li>
+              }
+            </ul>
+          }
+          @if (block.after) {
+            <p><app-rich-text [text]="block.after" /></p>
+          }
+        </blockquote>
+        <figcaption>{{ block.source }}</figcaption>
+      </figure>
+    }
+
+    @case ('panels') {
+      <div class="b-panels">
+        @for (panel of block.items; track panel.title; let i = $index) {
+          <article class="b-panel" appReveal [revealDelay]="(i % 2) * 60">
+            <h3>{{ panel.title }}</h3>
+            @if (panel.intro) {
+              <p class="b-panel__intro">{{ panel.intro }}</p>
+            }
+            <ul>
+              @for (item of panel.items; track $index) {
+                <li><app-icon name="check" [size]="15" [stroke]="2.2" /><span><app-rich-text [text]="item" /></span></li>
+              }
+            </ul>
+          </article>
+        }
+      </div>
+    }
+
+    @case ('callout') {
+      <aside class="b-callout" [attr.data-tone]="block.tone ?? 'neutral'" appReveal>
+        <span class="b-callout__icon">
+          <app-icon [name]="block.tone === 'accent' ? 'sparkles' : 'info'" [size]="20" />
+        </span>
+        <div>
+          @if (block.title) {
+            <h3>{{ block.title }}</h3>
+          }
+          <p><app-rich-text [text]="block.text" /></p>
+        </div>
+      </aside>
+    }
+
+    @case ('facts') {
+      <dl class="b-facts">
+        @for (fact of block.items; track fact.label; let i = $index) {
+          <div class="b-fact" appReveal [revealDelay]="i * 40">
+            <dt><app-rich-text [text]="fact.value" /></dt>
+            <dd>{{ fact.label }}</dd>
+          </div>
+        }
+      </dl>
+    }
+
+    @case ('docs') {
+      <section class="b-docs" [attr.id]="block.id">
+        @if (block.title) {
+          <h2 class="b-h" appReveal>{{ block.title }}</h2>
+        }
+        <app-doc-list [docs]="block.docs" />
+      </section>
+    }
+
+    @case ('special') {
+      <div class="b-special">
+        @switch (block.id) {
+          @case ('convention-table') {
+            <app-convention-table />
+          }
+          @case ('odor-table') {
+            <app-odor-table appReveal />
+          }
+          @case ('odor-methods') {
+            <app-odor-methods appReveal />
+          }
+        }
+      </div>
+    }
+  }
+}

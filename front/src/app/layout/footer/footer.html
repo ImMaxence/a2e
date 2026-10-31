@@ -1,0 +1,74 @@
+@let tt = t();
+<footer class="footer">
+  <div class="footer__body">
+    <div class="container">
+      <div class="footer__top">
+        <div class="footer__brand">
+          <a routerLink="/" aria-label="A2E Environnement"><app-logo /></a>
+          <p>{{ tt.footer.tagline }}</p>
+          <a class="btn btn--primary" routerLink="/contact">
+            {{ tt.common.contactUs }}
+            <app-icon name="arrow-right" [size]="18" />
+          </a>
+        </div>
+
+        <nav class="footer__col" [attr.aria-label]="tt.nav.services">
+          <h2>{{ tt.nav.services }}</h2>
+          <ul>
+            @for (s of services; track s.id) {
+              <li><a [routerLink]="['/prestations', s.slug]">{{ tt.services[s.id].nav }}</a></li>
+            }
+          </ul>
+        </nav>
+
+        <div class="footer__col">
+          <nav [attr.aria-label]="tt.nav.regulations">
+            <h2>{{ tt.nav.regulations }}</h2>
+            <ul>
+              @for (r of regulations; track r.id) {
+                <li><a [routerLink]="['/reglementation', r.slug]">{{ tt.regulations[r.id].nav }}</a></li>
+              }
+            </ul>
+          </nav>
+          <nav [attr.aria-label]="tt.footer.company">
+            <h2>{{ tt.footer.company }}</h2>
+            <ul>
+              <li><a routerLink="/references">{{ tt.nav.references }}</a></li>
+              <li><a routerLink="/espace-client">{{ tt.nav.clientArea }}</a></li>
+              <li><a routerLink="/contact">{{ tt.nav.contact }}</a></li>
+              <li><a routerLink="/mentions-legales">{{ tt.footer.legal }}</a></li>
+            </ul>
+          </nav>
+        </div>
+
+        <div class="footer__col footer__contact">
+          <h2>{{ tt.footer.contact }}</h2>
+          @for (c of contacts; track c.id) {
+            <div class="person">
+              <strong>{{ c.name }}</strong>
+              <a [href]="c.phoneHref"><app-icon name="phone" [size]="15" />{{ c.phone }}</a>
+              <a [href]="'mailto:' + c.email"><app-icon name="mail" [size]="15" /><span>{{ c.email }}</span></a>
+            </div>
+          }
+          @for (a of agencies; track a.id) {
+            <a class="agency" [href]="a.mapUrl" target="_blank" rel="noopener noreferrer">
+              <app-icon name="map-pin" [size]="15" />
+              <span>
+                <small>{{ tt.agencies[a.id] }}</small>
+                {{ a.lines.join(', ') }}
+              </span>
+            </a>
+          }
+        </div>
+      </div>
+
+      <div class="footer__bottom">
+        <p>{{ tt.footer.rights(year) }}</p>
+        <p>{{ tt.footer.registration }} {{ company.capital }} · SIRET {{ company.siret }} · APE {{ company.ape }}</p>
+        <button type="button" class="icon-btn" (click)="toTop()" [attr.aria-label]="tt.common.backToTop" [attr.title]="tt.common.backToTop">
+          <app-icon name="arrow-up" [size]="18" />
+        </button>
+      </div>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,105 @@
+@use 'mixins' as m;
+
+// Scroll reveal — toggled by the reveal directive. Short and subtle on purpose.
+@include m.motion {
+  .reveal {
+    opacity: 0;
+    transform: translate3d(0, 14px, 0);
+    transition:
+      opacity 0.5s var(--ease-out),
+      transform 0.5s var(--ease-out);
+    transition-delay: var(--reveal-delay, 0ms);
+
+    &.is-in {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+// Route transitions (View Transitions API): a quick cross-fade.
+@include m.motion {
+  ::view-transition-old(root) {
+    animation: vt-fade-out 0.18s ease-out both;
+  }
+
+  ::view-transition-new(root) {
+    animation: vt-fade-in 0.28s ease-out both;
+  }
+
+  // The fixed header stays in place (no slide with the page); its old/new images keep the
+  // default cross-fade so a changed label (active link) never shows both states at once.
+  ::view-transition-group(site-header) {
+    animation: none;
+  }
+
+  // Local transitions (filtering a grid): only the named elements move.
+  :root.vt-local::view-transition-old(root),
+  :root.vt-local::view-transition-new(root) {
+    animation: none;
+  }
+
+  :root.vt-local::view-transition-group(*) {
+    animation-duration: 0.4s;
+    animation-timing-function: var(--ease-out);
+  }
+
+  // Theme switch: circular reveal from the toggle position.
+  :root.theme-transition::view-transition-old(root),
+  :root.theme-transition::view-transition-old(site-header) {
+    animation: none;
+  }
+
+  :root.theme-transition::view-transition-new(root),
+  :root.theme-transition::view-transition-new(site-header) {
+    animation: theme-reveal 0.45s var(--ease-in-out) both;
+  }
+}
+
+// During a theme switch the new state must be final at once: colour transitions
+// (borders, backgrounds) would otherwise animate inside the revealed snapshot.
+:root.theme-transition,
+:root.theme-transition *,
+:root.theme-transition *::before,
+:root.theme-transition *::after {
+  transition: none !important;
+}
+
+@keyframes vt-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes vt-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes theme-reveal {
+  from {
+    clip-path: circle(0 at var(--vt-x, 50%) var(--vt-y, 0));
+  }
+  to {
+    clip-path: circle(var(--vt-r, 150vmax) at var(--vt-x, 50%) var(--vt-y, 0));
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -1,0 +1,54 @@
+<section class="hero" [class.has-media]="!!image()">
+  <div class="container hero__inner">
+    <div class="hero__text">
+      @if (crumbs().length) {
+        <nav class="crumbs" [attr.aria-label]="t().common.breadcrumb">
+          <ol>
+            <li><a routerLink="/">{{ t().common.home }}</a></li>
+            @for (crumb of crumbs(); track crumb.label) {
+              <li>
+                <app-icon name="chevron-right" [size]="14" />
+                @if (crumb.link) {
+                  <a [routerLink]="crumb.link">{{ crumb.label }}</a>
+                } @else {
+                  <span aria-current="page">{{ crumb.label }}</span>
+                }
+              </li>
+            }
+          </ol>
+        </nav>
+      }
+
+      @if (eyebrow()) {
+        <p class="eyebrow">
+          @if (icon()) {
+            <app-icon [name]="icon()!" [size]="16" />
+          }
+          {{ eyebrow() }}
+        </p>
+      }
+
+      <h1 class="title">{{ title() }}</h1>
+
+      @if (lead()) {
+        <p class="lead"><app-rich-text [text]="lead()!" /></p>
+      }
+
+      <div class="extra"><ng-content /></div>
+    </div>
+
+    @if (image()) {
+      <div class="hero__media">
+        <img
+          [src]="photoSrc(image()!)"
+          [srcset]="photoSrcset(image()!)"
+          sizes="(min-width: 1080px) 42vw, 100vw"
+          alt=""
+          width="1600"
+          height="1067"
+          fetchpriority="high"
+        />
+      </div>
+    }
+  </div>
+</section>

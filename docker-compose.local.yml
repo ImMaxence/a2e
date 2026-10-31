@@ -1,0 +1,5 @@
+# Local override: publishes the site on http://localhost:8088 (or FRONT_PORT)
+services:
+  front:
+    ports:
+      - "${FRONT_PORT:-8088}:80"

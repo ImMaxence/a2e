@@ -1,0 +1,104 @@
+@use 'mixins' as m;
+
+.hero {
+  padding-top: calc(var(--header-h) + clamp(1.25rem, 1rem + 2vw, 3rem));
+  padding-bottom: clamp(2rem, 1.5rem + 2.5vw, 4rem);
+  margin-bottom: clamp(1.5rem, 1rem + 2vw, 3rem);
+  border-bottom: 1px solid var(--c-border);
+  background: linear-gradient(180deg, var(--c-hero-a) 0%, var(--c-bg) 100%);
+}
+
+.hero__inner {
+  display: grid;
+  gap: 2rem;
+  align-items: center;
+
+  .has-media & {
+    @include m.up(lg) {
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      gap: 3.5rem;
+    }
+  }
+}
+
+.hero__text {
+  display: grid;
+  gap: 1rem;
+  justify-items: start;
+
+  @include m.motion {
+    animation: fade-up 0.45s var(--ease-out) both;
+  }
+}
+
+.crumbs ol {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0;
+  list-style: none;
+  font-size: var(--fs-sm);
+  color: var(--c-muted);
+
+  li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  a {
+    transition: color 0.2s;
+
+    @include m.hover {
+      color: var(--c-primary);
+    }
+  }
+
+  [aria-current] {
+    color: var(--c-ink-soft);
+    font-weight: 500;
+  }
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--c-primary);
+}
+
+.title {
+  max-width: 22ch;
+  font-size: clamp(1.9rem, 1.4rem + 2.4vw, 3.2rem);
+  line-height: 1.1;
+}
+
+.lead {
+  max-width: 62ch;
+  font-size: var(--fs-lg);
+  line-height: 1.6;
+  color: var(--c-ink-soft);
+}
+
+.extra:empty {
+  display: none;
+}
+
+.hero__media img {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+
+  @include m.up(lg) {
+    aspect-ratio: 4 / 3;
+  }
+
+  @include m.motion {
+    animation: fade-up 0.5s 0.08s var(--ease-out) both;
+  }
+}

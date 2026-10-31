@@ -1,0 +1,324 @@
+@use 'mixins' as m;
+
+:host {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.35rem;
+  font-size: 1.04rem;
+  color: var(--c-ink-soft);
+}
+
+.b-p {
+  max-width: 68ch;
+}
+
+.b-h {
+  margin-top: 1.6rem;
+  font-size: var(--fs-2xl);
+  color: var(--c-ink);
+  scroll-margin-top: calc(var(--header-h) + 2rem);
+
+  &::before {
+    content: '';
+    display: block;
+    width: 2.5rem;
+    height: 3px;
+    margin-bottom: 1rem;
+    border-radius: 3px;
+    background: var(--gradient-brand);
+  }
+}
+
+// Lists
+.b-list {
+  display: grid;
+  gap: 0.75rem;
+  max-width: 70ch;
+  padding: 0;
+  list-style: none;
+
+  li {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.85rem;
+    align-items: start;
+  }
+
+  &[data-variant='steps'] {
+    counter-reset: step;
+    gap: 0;
+
+    li {
+      position: relative;
+      padding-bottom: 1.25rem;
+
+      // Connector between numbered steps
+      &:not(:last-child)::before {
+        content: '';
+        position: absolute;
+        left: 1rem;
+        top: 2.2rem;
+        bottom: 0.2rem;
+        width: 2px;
+        background: linear-gradient(var(--c-primary), transparent);
+        opacity: 0.35;
+      }
+    }
+  }
+}
+
+.b-list__marker {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+
+  &--dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    margin: 0.65rem 0.4rem 0;
+    border-radius: 50%;
+    background: var(--gradient-brand);
+  }
+
+  &--check {
+    width: 1.45rem;
+    height: 1.45rem;
+    margin-top: 0.15rem;
+    border-radius: 50%;
+    background: var(--c-accent-soft);
+    color: var(--c-accent);
+  }
+
+  &--num {
+    width: 2.1rem;
+    height: 2.1rem;
+    border-radius: 50%;
+    background: var(--c-surface);
+    border: 1.5px solid color-mix(in srgb, var(--c-primary) 40%, transparent);
+    color: var(--c-primary);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.95rem;
+  }
+}
+
+// Figures
+.b-figure {
+  margin-block: 0.75rem;
+}
+
+.b-figures {
+  display: grid;
+  gap: 1.5rem;
+  align-items: start;
+  margin-block: 0.75rem;
+
+  @include m.up(sm) {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+}
+
+// Quote
+.b-quote {
+  position: relative;
+  margin-block: 0.5rem;
+  padding: clamp(1.5rem, 3vw, 2.25rem);
+  padding-left: clamp(1.75rem, 4vw, 3rem);
+  border-radius: var(--radius-lg);
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  overflow: hidden;
+
+  &::before {
+    content: '“';
+    position: absolute;
+    top: -1.5rem;
+    right: 1rem;
+    font-family: var(--font-display);
+    font-size: 9rem;
+    line-height: 1;
+    color: var(--c-primary);
+    opacity: 0.1;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: var(--gradient-brand);
+  }
+
+  blockquote {
+    display: grid;
+    gap: 0.85rem;
+    font-style: italic;
+    font-size: 0.98rem;
+  }
+
+  ul {
+    display: grid;
+    gap: 0.4rem;
+    padding-left: 1.2rem;
+
+    li::marker {
+      color: var(--c-primary);
+    }
+  }
+
+  figcaption {
+    margin-top: 1.1rem;
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--c-muted);
+  }
+}
+
+// Panels
+.b-panels {
+  display: grid;
+  gap: 1rem;
+
+  @include m.up(md) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.b-panel {
+  padding: 1.5rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--c-border);
+  background: var(--c-surface);
+  transition:
+    border-color 0.3s,
+    box-shadow 0.4s var(--ease-out),
+    transform 0.4s var(--ease-out);
+
+  @include m.hover {
+    border-color: color-mix(in srgb, var(--c-primary) 30%, transparent);
+    box-shadow: var(--shadow-md);
+    transform: none;
+  }
+
+  h3 {
+    margin-bottom: 0.9rem;
+    font-size: 1.2rem;
+    color: var(--c-ink);
+  }
+
+  ul {
+    display: grid;
+    gap: 0.6rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  li {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.6rem;
+    font-size: 0.95rem;
+    line-height: 1.55;
+
+    app-icon {
+      margin-top: 0.25rem;
+      color: var(--c-accent);
+    }
+  }
+}
+
+.b-panel__intro {
+  margin-bottom: 0.75rem;
+  font-size: 0.95rem;
+  color: var(--c-muted);
+}
+
+// Callout
+.b-callout {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1rem;
+  padding: 1.25rem 1.4rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--c-border);
+  background: var(--c-surface-2);
+
+  h3 {
+    margin-bottom: 0.35rem;
+    font-size: 1.1rem;
+    color: var(--c-ink);
+  }
+
+  &[data-tone='accent'] {
+    border-color: color-mix(in srgb, var(--c-accent) 30%, transparent);
+    background: linear-gradient(135deg, var(--c-accent-soft), var(--c-primary-soft));
+  }
+
+  &[data-tone='info'] {
+    border-color: color-mix(in srgb, var(--c-primary) 25%, transparent);
+    background: var(--c-primary-soft);
+  }
+}
+
+.b-callout__icon {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 12px;
+  background: var(--c-surface);
+  color: var(--c-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+// Facts
+.b-facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--c-border);
+  background: var(--c-border);
+  overflow: hidden;
+}
+
+.b-fact {
+  display: grid;
+  align-content: start;
+  gap: 0.35rem;
+  padding: 1.25rem;
+  background: var(--c-surface);
+
+  dt {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    background: var(--gradient-text);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  dd {
+    margin: 0;
+    font-size: 0.88rem;
+    line-height: 1.45;
+    color: var(--c-muted);
+  }
+}
+
+.b-docs {
+  display: grid;
+  gap: 1.25rem;
+  scroll-margin-top: calc(var(--header-h) + 2rem);
+}
+
+.b-special {
+  margin-block: 0.75rem;
+}

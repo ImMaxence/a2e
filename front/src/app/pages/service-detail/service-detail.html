@@ -1,0 +1,114 @@
+@let tt = t();
+@let m = meta();
+@let c = copy();
+
+<app-page-hero
+  [eyebrow]="tt.groups[m.group].title"
+  [title]="c.title"
+  [lead]="c.lead"
+  [crumbs]="[{ label: tt.nav.services, link: '/prestations' }, { label: c.nav }]"
+  [icon]="m.icon"
+  [image]="m.image"
+>
+  <div class="hero-actions">
+    <a class="btn btn--primary" routerLink="/contact" [queryParams]="{ service: m.id }">
+      {{ tt.service.quote }}
+      <app-icon name="arrow-right" [size]="18" />
+    </a>
+    <a class="btn btn--glass" [href]="primaryContact().phoneHref">
+      <app-icon name="phone" [size]="17" />
+      {{ tt.common.call }} · {{ primaryContact().phone }}
+    </a>
+  </div>
+</app-page-hero>
+
+<div class="container layout">
+  <article class="article">
+    <app-blocks [blocks]="c.body" />
+  </article>
+
+  <aside class="aside">
+    <div class="aside__sticky">
+      <section class="aside__card aside__card--contact" appReveal>
+        <h2>{{ tt.service.contactTitle }}</h2>
+        <p>{{ tt.service.contactText }}</p>
+        @for (id of m.contacts; track id) {
+          <app-expert-card [id]="id" />
+        }
+        <a class="btn btn--primary btn--block" routerLink="/contact" [queryParams]="{ service: m.id }">
+          {{ tt.service.quote }}
+          <app-icon name="arrow-right" [size]="18" />
+        </a>
+      </section>
+
+      @if (regulations().length) {
+        <section class="aside__card" appReveal [revealDelay]="100">
+          <h2>{{ tt.service.regulations }}</h2>
+          <ul class="aside__links">
+            @for (r of regulations(); track r.id) {
+              <li>
+                <a [routerLink]="['/reglementation', r.slug]">
+                  <span class="aside__icon"><app-icon [name]="r.icon" [size]="16" /></span>
+                  {{ tt.regulations[r.id].nav }}
+                  <app-icon name="arrow-right" [size]="15" class="aside__arrow" />
+                </a>
+              </li>
+            }
+          </ul>
+        </section>
+      }
+
+      @if (group().services.length > 1) {
+        <section class="aside__card" appReveal [revealDelay]="100">
+          <h2>{{ tt.groups[m.group].title }}</h2>
+          <ul class="aside__links">
+            @for (id of group().services; track id) {
+              <li>
+                <a [routerLink]="['/prestations', serviceById(id).slug]" [class.is-current]="id === m.id" [attr.aria-current]="id === m.id ? 'page' : null">
+                  <span class="aside__icon"><app-icon [name]="serviceById(id).icon" [size]="16" /></span>
+                  {{ tt.services[id].nav }}
+                </a>
+              </li>
+            }
+          </ul>
+        </section>
+      }
+    </div>
+  </aside>
+</div>
+
+<nav class="container pager" [attr.aria-label]="tt.service.others">
+  <a class="pager__link" [routerLink]="['/prestations', siblings().previous.slug]">
+    <span class="pager__dir"><app-icon name="arrow-left" [size]="16" />{{ tt.common.previous }}</span>
+    <strong>{{ tt.services[siblings().previous.id].nav }}</strong>
+  </a>
+  <a class="pager__link pager__link--next" [routerLink]="['/prestations', siblings().next.slug]">
+    <span class="pager__dir">{{ tt.common.next }}<app-icon name="arrow-right" [size]="16" /></span>
+    <strong>{{ tt.services[siblings().next.id].nav }}</strong>
+  </a>
+</nav>
+
+<section class="section related">
+  <div class="container">
+    <div class="section-head">
+      <p class="section-head__eyebrow" appReveal>{{ tt.service.explore }}</p>
+      <h2 class="section-head__title related__title" appReveal [revealDelay]="50">{{ tt.service.others }}</h2>
+    </div>
+    <div class="related__grid">
+      @for (id of related(); track id; let i = $index) {
+        <app-service-card [service]="id" appReveal [revealDelay]="i * 40" />
+      }
+    </div>
+  </div>
+</section>
+
+<app-cta-band />
+
+<!-- Phones: the expert stays one tap away while reading. -->
+<div class="mobile-cta">
+  <a class="btn btn--ghost" [href]="primaryContact().phoneHref">
+    <app-icon name="phone" [size]="17" />
+    {{ tt.common.call }}
+  </a>
+  <a class="btn btn--primary" routerLink="/contact" [queryParams]="{ service: m.id }">{{ tt.service.quote }}</a>
+</div>

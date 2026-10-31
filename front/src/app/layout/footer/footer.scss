@@ -1,0 +1,145 @@
+@use 'mixins' as m;
+
+:host {
+  display: block;
+}
+
+.footer {
+  margin-top: 1rem;
+  border-top: 1px solid var(--c-border);
+  background: var(--c-bg-soft);
+}
+
+.footer__body {
+  padding-top: clamp(2.5rem, 2rem + 2vw, 3.5rem);
+}
+
+.footer__top {
+  display: grid;
+  gap: 2.25rem;
+
+  @include m.up(md) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @include m.up(lg) {
+    grid-template-columns: 1.4fr 1fr 1fr 1.3fr;
+  }
+}
+
+.footer__brand {
+  display: grid;
+  align-content: start;
+  justify-items: start;
+  gap: 1.1rem;
+
+  p {
+    max-width: 34ch;
+    font-size: 0.95rem;
+    color: var(--c-muted);
+  }
+}
+
+.footer__col {
+  display: grid;
+  align-content: start;
+  gap: 0.9rem;
+  min-width: 0;
+
+  h2 {
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--c-muted);
+  }
+
+  nav + nav {
+    margin-top: 1.25rem;
+  }
+
+  nav {
+    display: grid;
+    gap: 0.9rem;
+  }
+
+  ul {
+    display: grid;
+    gap: 0.45rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  ul a {
+    font-size: 0.94rem;
+    color: var(--c-ink-soft);
+    transition: color 0.2s;
+
+    @include m.hover {
+      color: var(--c-primary);
+    }
+  }
+}
+
+.footer__contact {
+  font-size: 0.92rem;
+
+  a {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 0;
+    color: var(--c-ink-soft);
+    transition: color 0.2s;
+
+    app-icon {
+      color: var(--c-primary);
+    }
+
+    span {
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+
+    @include m.hover {
+      color: var(--c-primary);
+    }
+  }
+}
+
+.person {
+  display: grid;
+  gap: 0.3rem;
+
+  strong {
+    font-size: 0.96rem;
+  }
+}
+
+.agency {
+  align-items: flex-start !important;
+
+  app-icon {
+    margin-top: 0.2rem;
+  }
+
+  small {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--c-muted);
+  }
+}
+
+.footer__bottom {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1.5rem;
+  margin-top: clamp(2rem, 1.5rem + 2vw, 3rem);
+  padding-block: 1.25rem max(1.25rem, env(safe-area-inset-bottom));
+  border-top: 1px solid var(--c-border);
+  font-size: var(--fs-xs);
+  color: var(--c-muted);
+}

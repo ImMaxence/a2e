@@ -1,0 +1,32 @@
+@use 'mixins' as m;
+
+// Links produced by <app-rich-text>
+.rt-link {
+  display: inline;
+  font-weight: 600;
+  color: var(--c-primary);
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 100% 1.5px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  padding-bottom: 1px;
+  transition:
+    background-size 0.4s var(--ease-out),
+    color 0.25s;
+
+  app-icon {
+    display: inline-flex;
+    margin-left: 0.2em;
+    vertical-align: -0.1em;
+  }
+
+  @include m.hover {
+    background-size: 0% 1.5px;
+    background-position: 100% 100%;
+  }
+}
+
+strong {
+  font-weight: 650;
+  color: var(--c-ink);
+}

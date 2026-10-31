@@ -1,0 +1,65 @@
+@use 'sass:map';
+
+$breakpoints: (
+  sm: 640px,
+  md: 860px,
+  lg: 1080px,
+  xl: 1320px,
+);
+
+@mixin up($bp) {
+  @media (min-width: map.get($breakpoints, $bp)) {
+    @content;
+  }
+}
+
+@mixin down($bp) {
+  @media (max-width: (map.get($breakpoints, $bp) - 0.02px)) {
+    @content;
+  }
+}
+
+@mixin hover {
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      @content;
+    }
+  }
+}
+
+@mixin motion {
+  @media (prefers-reduced-motion: no-preference) {
+    @content;
+  }
+}
+
+@mixin glass {
+  background: var(--c-elevated);
+  backdrop-filter: saturate(170%) blur(18px);
+  -webkit-backdrop-filter: saturate(170%) blur(18px);
+}
+
+@mixin focus-ring {
+  outline: 2px solid var(--c-primary);
+  outline-offset: 3px;
+}
+
+@mixin eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-body);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--c-primary);
+
+  &::before {
+    content: '';
+    width: 1.6rem;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--gradient-brand);
+  }
+}

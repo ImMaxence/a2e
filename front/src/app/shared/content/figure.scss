@@ -1,0 +1,150 @@
+@use 'mixins' as m;
+
+:host {
+  display: block;
+}
+
+figure {
+  display: grid;
+  justify-items: center;
+  gap: 0.85rem;
+}
+
+.frame {
+  position: relative;
+  display: block;
+  width: min(100%, var(--w));
+  padding: 0;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--c-border);
+  background: var(--c-surface);
+  box-shadow: var(--shadow-md);
+
+  img {
+    width: 100%;
+    transition: transform 0.8s var(--ease-out);
+  }
+
+  .is-diagram & {
+    padding: clamp(0.75rem, 2vw, 1.25rem);
+    background: var(--c-paper);
+  }
+}
+
+button.frame {
+  cursor: zoom-in;
+
+  @include m.hover {
+    img {
+      transform: scale(1.03);
+    }
+
+    .zoom {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+.zoom {
+  position: absolute;
+  right: 0.75rem;
+  bottom: 0.75rem;
+  display: grid;
+  place-items: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: var(--radius-full);
+  background: rgb(5 18 28 / 0.75);
+  color: #fff;
+  opacity: 0;
+  transform: translateY(6px);
+  transition:
+    opacity 0.3s,
+    transform 0.4s var(--ease-out);
+
+  @media (hover: none) {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+figcaption {
+  max-width: 60ch;
+  font-size: var(--fs-sm);
+  color: var(--c-muted);
+  text-align: center;
+}
+
+dialog {
+  max-width: min(94vw, 1100px);
+  max-height: 92dvh;
+  padding: clamp(3.25rem, 2.5rem + 2vw, 3.75rem) clamp(1rem, 3vw, 2rem) clamp(1rem, 3vw, 2rem);
+  border: 0;
+  border-radius: var(--radius-lg);
+  background: var(--c-paper);
+  color: #0a1d2b;
+  box-shadow: var(--shadow-lg);
+  overflow: auto;
+  opacity: 0;
+  transform: scale(0.96) translateY(10px);
+  transition:
+    opacity 0.2s var(--ease-out),
+    transform 0.25s var(--ease-out),
+    overlay 0.2s allow-discrete,
+    display 0.2s allow-discrete;
+
+  &[open] {
+    opacity: 1;
+    transform: none;
+
+    @starting-style {
+      opacity: 0;
+      transform: scale(0.96) translateY(10px);
+    }
+  }
+
+  &::backdrop {
+    background: rgb(3 12 20 / 0);
+    backdrop-filter: blur(0);
+    transition:
+      background 0.2s,
+      backdrop-filter 0.2s,
+      overlay 0.2s allow-discrete,
+      display 0.2s allow-discrete;
+  }
+
+  &[open]::backdrop {
+    background: rgb(3 12 20 / 0.7);
+    backdrop-filter: blur(6px);
+
+    @starting-style {
+      background: rgb(3 12 20 / 0);
+      backdrop-filter: blur(0);
+    }
+  }
+
+  img {
+    width: auto;
+    max-width: 100%;
+    max-height: 78dvh;
+    margin-inline: auto;
+  }
+
+  p {
+    margin-top: 1rem;
+    text-align: center;
+    font-size: var(--fs-sm);
+    color: #44596a;
+  }
+}
+
+.close {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.6rem;
+  background: #fff;
+  color: #0a1d2b;
+  border-color: rgb(10 29 43 / 0.12);
+}

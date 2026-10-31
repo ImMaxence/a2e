@@ -1,0 +1,22 @@
+# Angular app — paths are relative to front/
+
+# Dependencies
+/node_modules
+
+# Build output and caches
+/dist
+/tmp
+/out-tsc
+/bazel-out
+/.angular/cache
+/.angular
+/.sass-cache
+/coverage
+*.tsbuildinfo
+
+# Misc
+/connect.lock
+/libpeerconnection.log
+testem.log
+/typings
+__screenshots__/

@@ -1,0 +1,231 @@
+@let tt = t();
+<div class="bar">
+  <div class="container bar__inner">
+    <a routerLink="/" class="brand" [attr.aria-label]="'A2E Environnement — ' + tt.common.home">
+      <app-logo />
+    </a>
+
+    <nav class="nav" [attr.aria-label]="tt.common.menu">
+      <ul>
+        <li (mouseenter)="openPanel('services')" (mouseleave)="scheduleClose()">
+          <button
+            type="button"
+            class="nav__link"
+            [class.is-active]="section() === 'prestations'"
+            [attr.aria-expanded]="panel() === 'services'"
+            aria-controls="panel-services"
+            (click)="togglePanel('services')"
+          >
+            {{ tt.nav.services }}
+            <app-icon name="chevron-down" [size]="14" class="chevron" />
+          </button>
+        </li>
+        <li (mouseenter)="openPanel('regulations')" (mouseleave)="scheduleClose()">
+          <button
+            type="button"
+            class="nav__link"
+            [class.is-active]="section() === 'reglementation'"
+            [attr.aria-expanded]="panel() === 'regulations'"
+            aria-controls="panel-regulations"
+            (click)="togglePanel('regulations')"
+          >
+            {{ tt.nav.regulations }}
+            <app-icon name="chevron-down" [size]="14" class="chevron" />
+          </button>
+        </li>
+        <li>
+          <a class="nav__link" routerLink="/references" routerLinkActive="is-active">{{ tt.nav.references }}</a>
+        </li>
+        <li>
+          <a class="nav__link" routerLink="/espace-client" routerLinkActive="is-active">{{ tt.nav.clientArea }}</a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="tools">
+      <app-lang-switch class="tools__desktop" />
+      <app-theme-switch class="tools__desktop" />
+      <a class="btn btn--primary btn--sm tools__cta" routerLink="/contact">
+        {{ tt.nav.contact }}
+        <app-icon name="arrow-right" [size]="16" />
+      </a>
+      <button
+        type="button"
+        class="burger"
+        [attr.aria-expanded]="mobileOpen()"
+        aria-controls="mobile-menu"
+        [attr.aria-label]="mobileOpen() ? tt.common.closeMenu : tt.common.menu"
+        (click)="toggleMobile()"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <line class="l1" x1="4" y1="6" x2="20" y2="6" />
+          <line class="l2" x1="4" y1="12" x2="20" y2="12" />
+          <line class="l3" x1="4" y1="18" x2="20" y2="18" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mega menu: services -->
+  @if (panel() === 'services') {
+    <div class="panel" id="panel-services" (mouseenter)="openPanel('services')" (mouseleave)="scheduleClose()">
+      <div class="container panel__inner panel__inner--services">
+        <a class="panel__feature" routerLink="/prestations">
+          <app-icon name="sparkles" [size]="22" />
+          <strong>{{ tt.nav.allServices }}</strong>
+          <span>{{ tt.nav.servicesTeaser }}</span>
+          <span class="link-arrow">{{ tt.common.discover }} <app-icon name="arrow-right" [size]="16" /></span>
+        </a>
+        @for (group of groups; track group.id; let gi = $index) {
+          <div class="panel__group">
+            <p class="panel__title">{{ tt.groups[group.id].title }}</p>
+            <ul>
+              @for (id of group.services; track id) {
+                <li>
+                  <a [routerLink]="['/prestations', serviceById(id).slug]" routerLinkActive="is-active">
+                    <span class="panel__icon"><app-icon [name]="serviceById(id).icon" [size]="18" /></span>
+                    {{ tt.services[id].nav }}
+                  </a>
+                </li>
+              }
+            </ul>
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+  <!-- Mega menu: regulations -->
+  @if (panel() === 'regulations') {
+    <div class="panel" id="panel-regulations" (mouseenter)="openPanel('regulations')" (mouseleave)="scheduleClose()">
+      <div class="container panel__inner panel__inner--regs">
+        <a class="panel__feature" routerLink="/reglementation">
+          <app-icon name="file" [size]="22" />
+          <strong>{{ tt.nav.allRegulations }}</strong>
+          <span>{{ tt.nav.regulationsTeaser }}</span>
+          <span class="link-arrow">{{ tt.common.discover }} <app-icon name="arrow-right" [size]="16" /></span>
+        </a>
+        <ul class="panel__list">
+          @for (reg of regulations; track reg.id; let i = $index) {
+            <li>
+              <a [routerLink]="['/reglementation', reg.slug]" routerLinkActive="is-active" class="panel__row">
+                <span class="panel__icon"><app-icon [name]="reg.icon" [size]="18" /></span>
+                <span>
+                  <strong>{{ tt.regulations[reg.id].nav }}</strong>
+                  <small>{{ tt.regulations[reg.id].short }}</small>
+                </span>
+              </a>
+            </li>
+          }
+          <li>
+            <a routerLink="/prestations/autosurveillance-stations-epuration" fragment="textes" class="panel__row">
+              <span class="panel__icon"><app-icon name="gauge" [size]="18" /></span>
+              <span>
+                <strong>{{ tt.nav.selfMonitoringTexts }}</strong>
+                <small>{{ tt.regulationsPage.selfMonitoringText }}</small>
+              </span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  }
+</div>
+
+<!-- Mobile menu -->
+@if (mobileOpen()) {
+  <div class="mobile" id="mobile-menu">
+    <nav class="mobile__nav" [attr.aria-label]="tt.common.menu">
+      <ul>
+        <li>
+          <a
+            routerLink="/"
+            class="mobile__link"
+            routerLinkActive="is-active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            ariaCurrentWhenActive="page"
+          >{{ tt.nav.home }}</a>
+        </li>
+        <li>
+          <button
+            type="button"
+            class="mobile__link"
+            [class.is-active]="section() === 'prestations'"
+            [attr.aria-expanded]="mobileSection() === 'services'"
+            (click)="toggleMobileSection('services')"
+          >
+            {{ tt.nav.services }}
+            <app-icon name="plus" [size]="20" class="mobile__toggle" />
+          </button>
+          @if (mobileSection() === 'services') {
+            <div class="mobile__sub">
+              <a
+                routerLink="/prestations"
+                class="mobile__all"
+                routerLinkActive="is-active"
+                [routerLinkActiveOptions]="{ exact: true }"
+                ariaCurrentWhenActive="page"
+              >{{ tt.nav.allServices }} <app-icon name="arrow-right" [size]="16" /></a>
+              @for (group of groups; track group.id) {
+                <p class="mobile__group">{{ tt.groups[group.id].title }}</p>
+                @for (id of group.services; track id) {
+                  <a [routerLink]="['/prestations', serviceById(id).slug]" routerLinkActive="is-active" ariaCurrentWhenActive="page">
+                    <app-icon [name]="serviceById(id).icon" [size]="18" />
+                    {{ tt.services[id].nav }}
+                  </a>
+                }
+              }
+            </div>
+          }
+        </li>
+        <li>
+          <button
+            type="button"
+            class="mobile__link"
+            [class.is-active]="section() === 'reglementation'"
+            [attr.aria-expanded]="mobileSection() === 'regulations'"
+            (click)="toggleMobileSection('regulations')"
+          >
+            {{ tt.nav.regulations }}
+            <app-icon name="plus" [size]="20" class="mobile__toggle" />
+          </button>
+          @if (mobileSection() === 'regulations') {
+            <div class="mobile__sub">
+              <a
+                routerLink="/reglementation"
+                class="mobile__all"
+                routerLinkActive="is-active"
+                [routerLinkActiveOptions]="{ exact: true }"
+                ariaCurrentWhenActive="page"
+              >{{ tt.nav.allRegulations }} <app-icon name="arrow-right" [size]="16" /></a>
+              @for (reg of regulations; track reg.id) {
+                <a [routerLink]="['/reglementation', reg.slug]" routerLinkActive="is-active" ariaCurrentWhenActive="page">
+                  <app-icon [name]="reg.icon" [size]="18" />
+                  {{ tt.regulations[reg.id].nav }}
+                </a>
+              }
+            </div>
+          }
+        </li>
+        <li>
+          <a routerLink="/references" class="mobile__link" routerLinkActive="is-active" ariaCurrentWhenActive="page">{{
+            tt.nav.references
+          }}</a>
+        </li>
+        <li>
+          <a routerLink="/espace-client" class="mobile__link" routerLinkActive="is-active" ariaCurrentWhenActive="page">{{
+            tt.nav.clientArea
+          }}</a>
+        </li>
+      </ul>
+    </nav>
+    <a class="btn btn--primary btn--block mobile__cta" routerLink="/contact">
+      {{ tt.common.contactUs }}
+      <app-icon name="arrow-right" [size]="18" />
+    </a>
+    <div class="mobile__footer">
+      <app-lang-switch [inline]="true" />
+      <app-theme-switch [labeled]="true" />
+    </div>
+  </div>
+}
