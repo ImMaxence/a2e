@@ -157,7 +157,7 @@
             {{ tt.nav.services }}
             <app-icon name="plus" [size]="20" class="mobile__toggle" />
           </button>
-          @if (mobileSection() === 'services') {
+          <div class="mobile__collapse" [class.is-open]="mobileSection() === 'services'" [attr.inert]="mobileSection() === 'services' ? null : ''">
             <div class="mobile__sub">
               <a
                 routerLink="/prestations"
@@ -176,7 +176,7 @@
                 }
               }
             </div>
-          }
+          </div>
         </li>
         <li>
           <button
@@ -189,7 +189,7 @@
             {{ tt.nav.regulations }}
             <app-icon name="plus" [size]="20" class="mobile__toggle" />
           </button>
-          @if (mobileSection() === 'regulations') {
+          <div class="mobile__collapse" [class.is-open]="mobileSection() === 'regulations'" [attr.inert]="mobileSection() === 'regulations' ? null : ''">
             <div class="mobile__sub">
               <a
                 routerLink="/reglementation"
@@ -205,7 +205,7 @@
                 </a>
               }
             </div>
-          }
+          </div>
         </li>
         <li>
           <a routerLink="/references" class="mobile__link" routerLinkActive="is-active" ariaCurrentWhenActive="page">{{

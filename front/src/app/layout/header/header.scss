@@ -6,11 +6,15 @@
   z-index: 100;
   display: block;
   view-transition-name: site-header;
-  transition: transform 0.3s var(--ease-out);
+  // Coming back: quick, decelerating.
+  transition: transform 0.25s cubic-bezier(0.2, 0, 0, 1);
 }
 
+// Leaving: a gentler, even slide. A strong ease-out covered most of the distance in the first
+// frames, which read as an instant jump on iOS momentum scrolling.
 :host(.is-hidden) {
-  transform: translateY(-100%);
+  transform: translate3d(0, -100%, 0);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .bar {
@@ -386,10 +390,37 @@
   }
 }
 
+// Animated unfold: a 0fr → 1fr grid row animates to the content's real height (works in Safari).
+.mobile__collapse {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.3s var(--ease-out);
+
+  > .mobile__sub {
+    min-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity 0.2s ease-out;
+
+    // Bottom spacing as a margin: padding would keep the collapsed row from reaching 0.
+    > :last-child {
+      margin-bottom: 1rem;
+    }
+  }
+
+  &.is-open {
+    grid-template-rows: 1fr;
+
+    > .mobile__sub {
+      opacity: 1;
+      transition-delay: 0.05s;
+    }
+  }
+}
+
 .mobile__sub {
   display: grid;
   gap: 0.1rem;
-  padding-bottom: 1rem;
 
   a {
     display: flex;

@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  ElementRef,
+  afterNextRender,
+  inject,
+  viewChild,
+} from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { I18n } from './core/i18n/i18n';
 import { Theme } from './core/theme/theme';
@@ -11,7 +19,7 @@ import { Header } from './layout/header/header';
   imports: [RouterOutlet, Header, Footer],
   template: `
     <a class="skip-link" href="#main">{{ t().common.skip }}</a>
-    <div class="progress" aria-hidden="true"></div>
+    <div class="progress" aria-hidden="true" #progress></div>
     <app-header />
     <main id="main" tabindex="-1">
       <router-outlet />
@@ -30,7 +38,6 @@ import { Header } from './layout/header/header';
       outline: none;
     }
 
-    // Reading progress, driven by a scroll timeline where supported.
     .progress {
       position: fixed;
       inset: 0 0 auto;
@@ -41,25 +48,39 @@ import { Header } from './layout/header/header';
       transform: scaleX(0);
       pointer-events: none;
     }
-
-    @supports (animation-timeline: scroll()) {
-      @media (prefers-reduced-motion: no-preference) {
-        .progress {
-          animation: progress linear both;
-          animation-timeline: scroll(root block);
-        }
-      }
-    }
-
-    @keyframes progress {
-      to {
-        transform: scaleX(1);
-      }
-    }
   `,
 })
 export class App {
   protected readonly t = inject(I18n).t;
   // Instantiated eagerly so the stored theme is applied at boot.
   private readonly theme = inject(Theme);
+  private readonly progress = viewChild.required<ElementRef<HTMLElement>>('progress');
+
+  constructor() {
+    const destroyRef = inject(DestroyRef);
+
+    // Reading progress, computed in JS rather than with a CSS scroll timeline: on iOS Safari the
+    // scroll range changes with the collapsing toolbar and momentum scrolling, which made the CSS
+    // version jump back and forth. Clamping also ignores the rubber-band overscroll.
+    afterNextRender(() => {
+      const bar = this.progress().nativeElement;
+      const root = document.documentElement;
+      let frame = 0;
+      const update = () => {
+        frame = 0;
+        const range = root.scrollHeight - root.clientHeight;
+        const ratio = range > 0 ? Math.min(Math.max(scrollY / range, 0), 1) : 0;
+        bar.style.transform = `scaleX(${ratio})`;
+      };
+      const schedule = () => (frame ||= requestAnimationFrame(update));
+      update();
+      addEventListener('scroll', schedule, { passive: true });
+      addEventListener('resize', schedule, { passive: true });
+      destroyRef.onDestroy(() => {
+        removeEventListener('scroll', schedule);
+        removeEventListener('resize', schedule);
+        cancelAnimationFrame(frame);
+      });
+    });
+  }
 }
