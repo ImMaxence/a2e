@@ -95,6 +95,14 @@ export class Header {
     this.closeTimer = setTimeout(() => this.panel.set(null), 180);
   }
 
+  /** A link picked in a panel closes it at once, so its exit plays while the route loads. */
+  protected onPanelClick(event: MouseEvent): void {
+    if ((event.target as Element).closest('a')) {
+      clearTimeout(this.closeTimer);
+      this.panel.set(null);
+    }
+  }
+
   protected togglePanel(panel: Panel): void {
     this.panel.set(this.panel() === panel ? null : panel);
   }

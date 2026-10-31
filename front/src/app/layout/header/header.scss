@@ -187,13 +187,16 @@
   inset: 100% 0 auto;
   padding-top: 0.5rem;
   animation: panel-in 0.15s ease-out;
+  // Snapshotted apart from the header in route transitions: inside the header's cross-fade, its
+  // exit showed as two offset copies (see _motion.scss).
+  view-transition-name: var(--vt-name);
 
   // Kept in the DOM by `animate.leave` until this ends. Inert so the pointer can't reopen it,
   // and behind the panel replacing it when switching menus.
   &.is-leaving {
     z-index: -1;
     pointer-events: none;
-    animation: panel-out 0.2s ease-in forwards;
+    animation: panel-out 0.15s ease-out forwards;
   }
 
   @include m.down(lg) {
@@ -499,6 +502,5 @@
 @keyframes panel-out {
   to {
     opacity: 0;
-    transform: translateY(-6px);
   }
 }

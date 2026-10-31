@@ -33,6 +33,25 @@
     animation: none;
   }
 
+  // Mega menu closed by a link: no cross-fade with its snapshot. While it is still leaving, the
+  // live panel carries on its own fade; once removed, the snapshot fades out the same way.
+  ::view-transition-group(mega-services),
+  ::view-transition-group(mega-regulations),
+  ::view-transition-new(mega-services),
+  ::view-transition-new(mega-regulations) {
+    animation: none;
+  }
+
+  ::view-transition-old(mega-services):not(:only-child),
+  ::view-transition-old(mega-regulations):not(:only-child) {
+    display: none;
+  }
+
+  ::view-transition-old(mega-services):only-child,
+  ::view-transition-old(mega-regulations):only-child {
+    animation: vt-fade-out 0.15s ease-out both;
+  }
+
   // Local transitions (filtering a grid): only the named elements move.
   :root.vt-local::view-transition-old(root),
   :root.vt-local::view-transition-new(root) {
