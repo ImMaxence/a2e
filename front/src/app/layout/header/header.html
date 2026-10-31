@@ -68,7 +68,7 @@
 
   <!-- Mega menu: services -->
   @if (panel() === 'services') {
-    <div class="panel" id="panel-services" (mouseenter)="openPanel('services')" (mouseleave)="scheduleClose()">
+    <div class="panel" id="panel-services" animate.leave="is-leaving" (mouseenter)="openPanel('services')" (mouseleave)="scheduleClose()">
       <div class="container panel__inner panel__inner--services">
         <a class="panel__feature" routerLink="/prestations">
           <app-icon name="sparkles" [size]="22" />
@@ -97,7 +97,7 @@
 
   <!-- Mega menu: regulations -->
   @if (panel() === 'regulations') {
-    <div class="panel" id="panel-regulations" (mouseenter)="openPanel('regulations')" (mouseleave)="scheduleClose()">
+    <div class="panel" id="panel-regulations" animate.leave="is-leaving" (mouseenter)="openPanel('regulations')" (mouseleave)="scheduleClose()">
       <div class="container panel__inner panel__inner--regs">
         <a class="panel__feature" routerLink="/reglementation">
           <app-icon name="file" [size]="22" />

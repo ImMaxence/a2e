@@ -188,6 +188,14 @@
   padding-top: 0.5rem;
   animation: panel-in 0.15s ease-out;
 
+  // Kept in the DOM by `animate.leave` until this ends. Inert so the pointer can't reopen it,
+  // and behind the panel replacing it when switching menus.
+  &.is-leaving {
+    z-index: -1;
+    pointer-events: none;
+    animation: panel-out 0.2s ease-in forwards;
+  }
+
   @include m.down(lg) {
     display: none;
   }
@@ -485,5 +493,12 @@
   from {
     opacity: 0;
     transform: translateY(-4px);
+  }
+}
+
+@keyframes panel-out {
+  to {
+    opacity: 0;
+    transform: translateY(-6px);
   }
 }
