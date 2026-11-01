@@ -47,6 +47,9 @@ import { Header } from './layout/header/header';
       transform-origin: 0 50%;
       transform: scaleX(0);
       pointer-events: none;
+      /* Own snapshot during view transitions: otherwise it stays in the root snapshot, under the
+         lifted header (site-header), and vanishes while a grid is filtered. */
+      view-transition-name: scroll-progress;
     }
   `,
 })
