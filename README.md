@@ -2,6 +2,22 @@
 
 Refonte du site [a2eenvironnement.fr](https://www.a2eenvironnement.fr) — bureau d'études en eau, assainissement et sols.
 
+**Démo en ligne : [a2e.mbonnici.fr](https://a2e.mbonnici.fr/)**
+
+## Aperçu
+
+| Accueil (thème sombre) | Accueil (thème clair) |
+| --- | --- |
+| ![Accueil, thème sombre](docs/screenshots/accueil.png) | ![Accueil, thème clair](docs/screenshots/accueil-clair.png) |
+
+| Prestations | Références |
+| --- | --- |
+| ![Page Prestations](docs/screenshots/prestations.png) | ![Page Références](docs/screenshots/references.png) |
+
+| Contact | Mobile |
+| --- | --- |
+| ![Page Contact](docs/screenshots/contact.png) | <img src="docs/screenshots/mobile.png" alt="Accueil sur mobile" width="260"> |
+
 ## Structure
 
 ```
@@ -15,6 +31,7 @@ Refonte du site [a2eenvironnement.fr](https://www.a2eenvironnement.fr) — burea
 │   ├── public/               # Images, polices auto-hébergées, documents réglementaires
 │   ├── nginx/                # Config nginx de production
 │   └── Dockerfile
+├── docs/screenshots/         # Captures d'écran du README
 ├── docker-compose.yml        # Production (Coolify)
 └── docker-compose.local.yml  # Surcharge locale (port 8088)
 ```
